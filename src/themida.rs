@@ -56,12 +56,12 @@ fn search_for_themida_code_entries(
     }
 
     let llil_func = func.low_level_il().ok()?;
-    // TODO(ergrelet): search any basic block, not just the first one, as
-    // functions might be only partially obfuscated
-    if let Some(first_block) = llil_func.basic_blocks().iter().next() {
-        if let Some(first_inst) = first_block.iter().next() {
+    // Iterate over all basic blocks
+    for llil_bb in llil_func.basic_blocks().iter() {
+        // Check only the last instruction as we're looking for a JMP
+        if let Some(llil_inst) = llil_bb.iter().last() {
             // Match `jmp imm` instruction
-            if let llil::InstrInfo::TailCall(op) = first_inst.info() {
+            if let llil::InstrInfo::TailCall(op) = llil_inst.info() {
                 if let llil::ExprInfo::ConstPtr(const_operation) = op.target().info() {
                     let jmp_destination = const_operation.value();
                     // Check if jmp destination is inside of Themida's section
@@ -86,7 +86,7 @@ fn search_for_themida_code_entries(
                             op.address(),
                             func.symbol().full_name(),
                         );
-                        return Some(CodeEntryDescription::MUTEnter(first_inst.address()));
+                        return Some(CodeEntryDescription::MUTEnter(llil_inst.address()));
                     }
                 }
             }
