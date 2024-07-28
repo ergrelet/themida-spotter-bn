@@ -12,5 +12,5 @@ rayon = "1.10"
 
 [dependencies.binaryninja]
 git = "https://github.com/Vector35/binaryninja-api.git"
-tag = "v4.0.4911-stable"
+tag = "v4.1.5747-stable"
 features = ["rayon"]
