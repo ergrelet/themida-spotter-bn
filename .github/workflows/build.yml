@@ -1,0 +1,36 @@
+name: Build
+
+on: [push]
+
+jobs:
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build binaryninja-core placeholder
+        working-directory: ./ci/binaryninja-api
+        shell: bash
+        run: |
+          cmake -B build
+          cmake --build build --config Release
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Build
+        env:
+          BINARYNINJADIR: ${{ github.workspace }}/ci/binaryninja-api/build/Release
+        run: cargo build --release
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: themida-spotter-bn_win64
+          path: target/release/*.dll
+          retention-days: 3
