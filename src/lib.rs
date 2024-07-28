@@ -18,6 +18,7 @@ pub type CodeEntryDestRange = std::ops::Range<u64>;
 
 const THEMIDA_SPOTTER_PLUGIN_NAME: &str = "themida-spotter-bn";
 const THEMIDA_SPOTTER_TAG_NAME: &str = "Themida's obfuscated code entries";
+const THEMIDA_SPOTTER_TAG_ICON: &str = "🛡";
 
 #[derive(Debug)]
 pub enum CodeEntryDescription {
@@ -121,10 +122,7 @@ fn search_for_code_entries_task<
         let vm_entry_tag_type = view
             .get_tag_type(THEMIDA_SPOTTER_TAG_NAME)
             .unwrap_or_else(|| {
-                // Note(ergrelet): due to a bug in Binja's Rust API, `icon`
-                // actually sets the name of the tag.
-                // FIXME: Update the code to set an actual icon when the bug is fixed upstream.
-                view.create_tag_type(THEMIDA_SPOTTER_TAG_NAME, THEMIDA_SPOTTER_TAG_NAME)
+                view.create_tag_type(THEMIDA_SPOTTER_TAG_NAME, THEMIDA_SPOTTER_TAG_ICON)
             });
 
         // Create tags for each obfuscated code entry found (if any)

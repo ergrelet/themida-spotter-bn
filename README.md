@@ -7,7 +7,7 @@ Virtualizer), in order to help reverse engineers focus on interesting code.
 ## Screenshot
 
 <p align="center">
-  <img width="400" src="static/tags_screenshot.png">
+  <img width="370" src="static/tags_screenshot.png">
 </p>
 
 # Supported Targets
